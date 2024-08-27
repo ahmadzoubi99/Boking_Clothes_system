@@ -1,0 +1,131 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "HomeLayout2";
+}
+@model List<CartItem>
+<!-- Checkout Start -->
+<div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+        <div class="col-lg-6">
+            <div class="mb-4">
+                <h4 class="font-weight-semi-bold mb-4">Visa Card</h4>
+                <form asp-action="Checkout" asp-controller="Cart" id="checkoutForm" method="post">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <label for="cardHolder">Card Holder</label>
+                            <input class="form-control" type="text" name="CardHolder" id="cardHolder" placeholder="Enter Card Holder Name">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input class="form-control" type="text" name="CardNumber" id="cardNumber" placeholder="Enter Card Number">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="cvv">CVV</label>
+                            <input class="form-control" type="text" name="CVV" id="cvv" placeholder="Enter CVV">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="expiryDate">Expiry Date</label>
+                            <input class="form-control" type="text" name="ExpiryDate" id="expiryDate" placeholder="MM/YY">
+                            <button type="submit" class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Place Order</button>
+                        </div>
+                    </div>
+
+                    </form>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card border-secondary mb-5">
+                <div class="card-header bg-secondary border-0">
+                    <h4 class="font-weight-semi-bold m-0">Order Total</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="font-weight-medium mb-3">Products</h5>
+                    @foreach (var item in Model)
+                    {
+                        <div class="d-flex justify-content-between">
+                            <p>@item.ProductName</p>
+                        <p>
+                                $@(item.Price * item.NumberOfDaysRent + (decimal)item.Price * 0.5m)
+                        </p>
+                        </div>
+                    }
+                    <hr class="mt-0">
+@*                     <div class="d-flex justify-content-between mb-3 pt-1">
+                        <h6 class="font-weight-medium">Subtotal</h6>
+                        <h6 class="font-weight-medium">$@Model.Sum(item => item.Price * item.NumberOfDaysRent).ToString("C")</h6>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-medium">Mortgage</h6>
+                        <h6 class="font-weight-medium">
+                            $@Model.Sum(item => (item.Price * item.NumberOfDaysRent + (decimal)item.Price * 0.5m)).ToString("C")
+                        </h6>
+                    </div> *@
+                </div>
+                <div class="card-footer border-secondary bg-transparent">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5 class="font-weight-bold">Total</h5>
+                        <h5 class="font-weight-bold">
+                            @ViewBag.totalAmount
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Checkout End -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#checkoutForm').on('submit', function (e) {
+            e.preventDefault();
+
+            // Show processing message
+            Swal.fire({
+                title: 'Processing Payment',
+                text: 'Please wait while we process your payment...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: '/Cart/Checkout',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Successful',
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 4000
+                        }).then(function () {
+                            window.location.href = '/Home/Index';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Payment Failed',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong with the payment process. Please try again.',
+                    });
+                }
+            });
+        });
+    });
+</script>

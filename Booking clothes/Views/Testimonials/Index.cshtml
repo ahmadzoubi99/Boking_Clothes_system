@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Booking_clothes.Models.Testimonial>
+
+@{
+    Layout = "AdminLayout";
+}
+
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6 style="margin-bottom:20px">Testimonials</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Content</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="align-middle text-center">@item.Id</td>
+                                        <td class="align-middle text-center">@item.User.FirstName  @item.User.LastName</td>
+                                        <td class="align-middle text-center">@item.TestimonialText</td>
+                                        <td class="align-middle text-center">@item.Status</td>
+                                        <td class="align-middle text-center">
+                                            <form id="approveForm-@item.Id" style="padding-top:10px" method="post" asp-action="Accept" asp-controller="Testimonials" style="display: inline-block;">
+                                                <input type="hidden" name="Id" value="@item.Id" />
+                                                <input type="hidden" name="UserId" value="@item.User.Id" />
+                                                <input type="hidden" name="TestimonialText" value="@item.TestimonialText" />
+                                                <input type="hidden" name="Status" value="Accept" />
+                                                <button type="button" onclick="confirmApprove('@item.Id')" style="background-color:green" class="btn btn-sm btn-danger">Approve</button>
+                                            </form>
+                                            <form id="rejectForm-@item.Id" style="padding-top:10px" method="post" asp-action="Reject" asp-controller="Testimonials" style="display: inline-block;">
+                                                <input type="hidden" name="Id" value="@item.Id" />
+                                                <input type="hidden" name="UserId" value="@item.User.Id" />
+                                                <input type="hidden" name="TestimonialText" value="@item.TestimonialText" />
+                                                <input type="hidden" name="Status" value="Reject" />
+                                                <button type="button" onclick="confirmReject('@item.Id')"  class="btn btn-sm btn-danger">Reject</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmApprove(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to approve this testimonial?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, approve it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#approveForm-' + id).submit();
+            }
+        });
+    }
+
+    function confirmReject(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to reject this testimonial?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, reject it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#rejectForm-' + id).submit();
+            }
+        });
+    }
+</script>

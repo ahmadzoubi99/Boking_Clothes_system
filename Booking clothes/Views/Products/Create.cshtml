@@ -1,0 +1,147 @@
+﻿@model Booking_clothes.Models.Products
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "AdminLayout";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4" style="padding-left:25px">
+                <div class="card-header pb-0">
+                    <h6 style="margin-bottom:20px">Products</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <h1>Create</h1>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <form id="productForm" asp-action="Create" asp-controller="Products" enctype="multipart/form-data">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="form-group">
+                                        <label asp-for="Name" class="control-label"></label>
+                                        <input asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Description" class="control-label"></label>
+                                        <input asp-for="Description" class="form-control" />
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="Color" class="control-label"></label>
+                                        <input asp-for="Color" class="form-control" />
+                                        <span asp-validation-for="Color" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CategoryId" class="control-label"></label>
+                                        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="PricePerDay" class="control-label"></label>
+                                        <input asp-for="PricePerDay" class="form-control" />
+                                        <span asp-validation-for="PricePerDay" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="Availability" /> @Html.DisplayNameFor(model => model.Availability)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="DiscountValue" class="control-label"></label>
+                                        <input asp-for="DiscountValue" class="form-control" />
+                                        <span asp-validation-for="DiscountValue" class="text-danger"></span>
+                                    </div>
+@*                                     <div class="form-group" hidden>
+                                        <label asp-for="Stock" class="control-label"></label>
+                                        <input asp-for="Stock" value="1" class="form-control" />
+                                        <span asp-validation-for="Stock" class="text-danger"></span>
+                                    </div> *@
+                                    <div class="form-group">
+                                        <label asp-for="ImageFile1" class="control-label"></label>
+                                        <input type="file" asp-for="ImageFile1" class="form-control" />
+                                        <span asp-validation-for="ImageFile1" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ImageFile2" class="control-label"></label>
+                                        <input type="file" asp-for="ImageFile2" class="form-control" />
+                                        <span asp-validation-for="ImageFile2" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="ImageFile3" class="control-label"></label>
+                                        <input type="file" asp-for="ImageFile3" class="form-control" />
+                                        <span asp-validation-for="ImageFile3" class="text-danger"></span>
+                                    </div>
+                                    <div hidden class="form-group">
+                                        <label asp-for="CreatedAt" class="control-label"></label>
+                                        <input asp-for="CreatedAt" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd") />
+                                        <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group form-check" hidden>
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" value="Create" class="btn btn-primary" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div>
+                            <a asp-action="Index">Back to List</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#productForm').submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var form = $(this);
+            var formData = new FormData(form[0]); // Use FormData to handle file uploads
+
+            $.ajax({
+                type: "POST",
+                url: form.attr('action'),
+                data: formData,
+                contentType: false, // Required for file upload
+                processData: false, // Required for file upload
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Success!',
+                            response.message,
+                            'success'
+                        ).then(() => {
+                            window.location.href = '@Url.Action("Index")'; // Redirect to the Index page
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire(
+                        'Error!',
+                        'There was an error processing your request.',
+                        'error'
+                    );
+                }
+            });
+        });
+    });
+</script>

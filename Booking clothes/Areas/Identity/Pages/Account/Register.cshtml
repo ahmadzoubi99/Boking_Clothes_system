@@ -1,0 +1,163 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/AuthAssets/StyleSheet.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+</head>
+<body>
+
+    <section>
+        <form id="account" method="post" >
+            <h1>Login</h1>
+            <div class="login-form">
+                <h4>First Name</h4>
+                <div class="username-input">
+                    <i class="fas fa-user"></i>
+                    <input asp-for="Input.FirstName" autocomplete="current-password" placeholder="Last name" aria-required="true" />
+                    <label hidden asp-for="Input.FirstName" class="form-label"></label>
+                    <span hidden asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <h4>Last Name</h4>
+                <div class="username-input">
+                    <i class="fas fa-user"></i>
+                    <input asp-for="Input.LastName" autocomplete="current-password" placeholder="Last name" aria-required="true" />
+                    <label hidden asp-for="Input.LastName" class="form-label"></label>
+                    <span hidden asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+                <h4>Email</h4>
+                <div class="username-input">
+                    <i class="fas fa-user"></i>
+                    <input asp-for="Input.Email" autocomplete="current-password" placeholder="Email" aria-required="true" />
+                    <br />
+                    <label hidden asp-for="Input.Email" class="form-label"></label>
+                    <span  asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <h4>Password</h4>
+                <div class="password-input">
+                    <i class="fas fa-lock"></i>
+                    <input asp-for="Input.Password" autocomplete="current-password" placeholder="Password" aria-required="true" />
+                    <br />
+
+                    <label hidden asp-for="Input.Password" class="form-label"></label>
+                    <span  asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <h4>Confirm Password</h4>
+                <div class="password-input">
+                    <i class="fas fa-lock"></i>
+                    <input asp-for="Input.ConfirmPassword" autocomplete="current-password" placeholder="Confirm Passowrd" aria-required="true" />
+                    <br />
+
+                    <label hidden asp-for="Input.ConfirmPassword" class="form-label"></label>
+                    <span  asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <h4>Address</h4>
+                <div class="username-input">
+                    <i class="fas fa-user"></i>
+                    <input asp-for="Input.Address" autocomplete="current-password" placeholder="Address" aria-required="true" />
+                    <br />
+
+                    <label hidden asp-for="Input.Address" class="form-label"></label>
+                    <span hidden asp-validation-for="Input.Address" class="text-danger"></span>
+                </div>
+                <p>Forgot password?</p>
+            </div>
+            <button id ="registerSubmit" type="submit" class="login-btn">
+                Reigister
+            </button>
+        </form>
+            <div class="alternative-signup">
+                <p>Not a member? <span> <a href="/Identity/Account/Register" class="nav-item nav-link">Sign-in</a></span></p>
+            </div>
+    </section>
+
+</body>
+</html>
+
+
+
+@* <h1>@ViewData["Title"]</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form id="registerForm" asp-page="/Account/Register" method="post">
+            <h2>Create a new account.</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                <label asp-for="Input.Email"></label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.Password"></label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.ConfirmPassword"></label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Address" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.Address"></label>
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.FirstName"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.LastName" class="form-control" autocomplete="new-password" aria-required="true" />
+                <label asp-for="Input.LastName"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        </form>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h3>Use another service to register.</h3>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
+                            about setting up this ASP.NET application to support logging in via external services</a>.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins!)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
+ *@
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

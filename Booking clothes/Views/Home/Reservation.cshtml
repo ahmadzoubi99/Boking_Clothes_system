@@ -1,0 +1,124 @@
+﻿
+
+@{
+    Layout = "HomeLayout2";
+
+    var reservedDates = ViewBag.ReservedDates as List<DateTime>;
+    int clothId = ViewBag.ClothId;
+    string ProductName = ViewBag.ProductName;
+
+}
+
+<div class="calendar-container">
+    <h3>Booking Availability for Product name: @ProductName</h3>
+
+    <!-- Date Selection Form -->
+    <form asp-action="ProductDetails" method="post" asp-route-id="@clothId">
+        <input type="hidden" name="ClothId" value="@clothId" />
+
+        <label for="startDate">Start Date:</label>
+        <input type="text" id="startDate" name="startDate" readonly />
+
+        <label for="endDate">End Date:</label>
+        <input type="text" id="endDate" name="endDate" readonly />
+
+        <button type="submit">Book Now</button>
+    </form>
+
+    <!-- Calendar Display -->
+    <div class="calendar">
+        @for (var date = DateTime.Today; date <= DateTime.Today.AddMonths(1); date = date.AddDays(1))
+        {
+            var isReserved = reservedDates.Contains(date);
+
+            <div class="calendar-day @(isReserved ? "reserved" : "available")"
+                 data-date="@date.ToString("yyyy-MM-dd")">
+                @date.ToString("dd MMM yyyy")
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .calendar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+    }
+
+    .calendar-day {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .reserved {
+        background-color: #f8d7da;
+        color: #721c24;
+        cursor: not-allowed;
+    }
+
+    .available {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .selected {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const reservedDates = @Html.Raw(Json.Serialize(reservedDates));
+        let startDateElement = document.getElementById("startDate");
+        let endDateElement = document.getElementById("endDate");
+        let selectedStart = null;
+        let selectedEnd = null;
+
+        document.querySelectorAll('.calendar-day.available').forEach(day => {
+            day.addEventListener('click', function () {
+                const selectedDate = new Date(day.getAttribute('data-date'));
+
+                if (!selectedStart || (selectedStart && selectedEnd)) {
+                    // Set as start date
+                    selectedStart = selectedDate;
+                    selectedEnd = null;
+                    startDateElement.value = day.getAttribute('data-date');
+                    endDateElement.value = '';
+                } else if (selectedStart && !selectedEnd && selectedDate > selectedStart) {
+                    // Set as end date
+                    selectedEnd = selectedDate;
+                    endDateElement.value = day.getAttribute('data-date');
+                }
+
+                // Highlight the selected days
+                highlightSelectedDays();
+            });
+        });
+
+        function highlightSelectedDays() {
+            document.querySelectorAll('.calendar-day').forEach(day => {
+                const date = new Date(day.getAttribute('data-date'));
+                if (selectedStart && date.getTime() === selectedStart.getTime()) {
+                    day.classList.add('selected');
+                } else if (selectedEnd && date >= selectedStart && date <= selectedEnd) {
+                    day.classList.add('selected');
+                } else {
+                    day.classList.remove('selected');
+                }
+            });
+        }
+    });
+</script>
+
+

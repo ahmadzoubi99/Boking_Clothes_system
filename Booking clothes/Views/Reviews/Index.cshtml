@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Booking_clothes.Models.Review>
+
+@{
+    Layout = "AdminLayout";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6 style="margin-bottom:20px">
+                        Categories
+                    </h6>
+                    <p style="background-color:#d00e9a;padding:8px;display:inline">
+                        <a style="color:white" asp-action="Create">Create New</a>
+                    </p>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+
+        <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.User)
+            </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.Products)
+            </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.Rating)
+            </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.ReviewText)
+            </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.CreatedAt)
+            </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.IsDeleted)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                                        <td class="align-middle text-center">
+                                            @Html.DisplayFor(modelItem => item.User.Id)
+            </td>
+                                        <td class="align-middle text-center">
+                                            @Html.DisplayFor(modelItem => item.Products.Name)
+            </td>
+                                        <td class="align-middle text-center">
+                                            @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+                                        <td class="align-middle text-center">
+                                            @Html.DisplayFor(modelItem => item.ReviewText)
+            </td>
+                                        <td class="align-middle text-center">
+                                            @Html.DisplayFor(modelItem => item.CreatedAt)
+            </td>
+                                        <td class="align-middle text-center">
+                                            @Html.DisplayFor(modelItem => item.IsDeleted)
+            </td>
+                                        <td class="align-middle text-center">
+                                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

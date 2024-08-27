@@ -1,0 +1,101 @@
+﻿@{
+    Layout = null;
+}
+@model Booking_clothes.Models.Banck
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/VisaCardAssets/VisaCard.css">
+</head>
+<body>
+    <div class="credit-card-form">
+        <h2>PAYMENT PORTAL</h2>
+        <img class="Image1" src="https://i.ibb.co/hgJ7z3J/6375aad33dbabc9c424b5713-card-mockup-01.png" alt="Card Mockup" border="0">
+
+        <form class="checkoutForm" id="payment-form" asp-action="ProcessCheckout" method="post" onsubmit="return validateForm()">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label for="card-number">Card Number</label>
+                <input type="text" id="card-number" name="CardNumber" class="form-control" placeholder="Card number" required>
+                <span id="card-number-error" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="card-holder">Card Holder</label>
+                <input type="text" id="card-holder" name="CardHolder" class="form-control" placeholder="Card holder's name" required>
+                <span id="card-holder-error" class="text-danger"></span>
+            </div>
+            <div class="form-row">
+                <div class="form-group form-column">
+                    <label for="expiry-date">Expiry Date</label>
+                    <input type="text" id="expiry-date" name="ExpiryDate" class="form-control" placeholder="MM/YY" required>
+                    <span id="expiry-date-error" class="text-danger"></span>
+                </div>
+                <div class="form-group form-column">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="CVV" class="form-control" placeholder="CVV" required>
+                    <span id="cvv-error" class="text-danger"></span>
+                </div>
+            </div>
+            <button type="submit" class="click-button">PAY NOW - $(@ViewBag.totalAmount)</button>
+        </form>
+        @if (ViewBag.Error != null)
+        {
+            <div class="text-danger" style="color:red">@ViewBag.Error</div>
+        }
+    </div>
+    <script src="~/VisaCardAssets/JavaScript.js"></script>
+</body>
+</html>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('.checkoutForm').on('submit', function (e) {
+            e.preventDefault();
+
+            // Show processing message
+            Swal.fire({
+                title: 'Processing Payment',
+                text: 'Please wait while we process your payment...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: '/Cart/Checkout',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Successful',
+                            text: response.message,
+                            showConfirmButton: false,
+                            timer: 4000
+                        }).then(function () {
+                            window.location.href = '/Home/Index';
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Payment Failed',
+                            text: response.message,
+                        });
+                    }
+                },
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Something went wrong with the payment process. Please try again.',
+                    });
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,90 @@
+﻿
+@{
+    Layout = "AdminLayout";
+}
+
+@model IEnumerable<Booking_clothes.Models.Review>
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0">
+                    <h6 style="margin-bottom:20px">
+                        Reviews
+                    </h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.User)
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.Products)
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.Rating)
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.ReviewText)
+                                    </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        @Html.DisplayNameFor(model => model.CreatedAt)
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <tbody>
+                            <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                    <tr>
+                                        <td class="align-middle text-center">
+                                                    @if (item.User != null)
+                                                    {
+                                                        @item.User.FirstName @item.User.LastName
+                                                    }
+                                                    else
+                                                    {
+                                                <span></span>
+                                                    }
+                                        </td>
+
+                                        <td class="align-middle text-center">
+                                                    @if (item.Products != null)
+                                                    {
+                                                        @Html.DisplayFor(modelItem => item.Products.Name)
+                                                    }
+                                                    else
+                                                    {
+                                                <span> </span>
+                                                    }
+                                        </td>
+
+                                        <td class="align-middle text-center">
+                                                    @Html.DisplayFor(modelItem => item.Rating)
+                                        </td>
+
+                                        <td class="align-middle text-center">
+                                                    @Html.DisplayFor(modelItem => item.ReviewText)
+                                        </td>
+
+                                        <td class="align-middle text-center">
+                                                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                                        </td>
+
+                                    </tr>
+                                        }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
